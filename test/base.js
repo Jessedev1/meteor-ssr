@@ -34,21 +34,21 @@ Tinytest.add("base - base dynamic templates", function(test) {
   SSR.compileTemplate(name, "Hello {{name}}");
   var name2 = Random.id();
 
-  SSR.compileTemplate(name2, format('MeteorHacks: {{>Template.dynamic template="%s" data=user}}', name));
+  SSR.compileTemplate(name2, format('Jessedev: {{>Template.dynamic template="%s" data=user}}', name));
   var renderedText = SSR.render(name2, {user: {
     name: "arunoda"
   }});
 
-  test.equal(renderedText, "MeteorHacks: Hello arunoda");
+  test.equal(renderedText, "Jessedev: Hello arunoda");
 });
 
-Tinytest.add("base - cursor support", function(test) {
+Tinytest.add("base - cursor support", async function(test) {
   var name = Random.id();
   SSR.compileTemplate(name, "{{#each posts}}{{name}}, {{/each}}");
 
   var coll = new Mongo.Collection(Random.id());
-  coll.insert({name: "nodejs"});
-  coll.insert({name: "meteor"});
+  await coll.insertAsync({name: "nodejs"});
+  await coll.insertAsync({name: "meteor"});
 
   var renderedText = SSR.render(name, {
     posts: coll.find()
